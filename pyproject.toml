@@ -22,6 +22,7 @@ Repository = "https://github.com/machallboyd/api_takehome"
 #probably good for a demo script
 
 [project.optional-dependencies]
-test = [
+dev = [
   "pytest",
+  "pip-tools"
   ]
