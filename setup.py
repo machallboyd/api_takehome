@@ -19,23 +19,7 @@ def read(*names, **kwargs):
     with open(path, encoding=kwargs.get('encoding', 'utf8')) as fh:
         return fh.read()
 
-
-# previous approach used to ignored badges in PyPI long description
-# long_description = '{}\n{}'.format(
-#     re.compile(
-#         '^.. start-badges.*^.. end-badges',
-#         re.M | re.S,
-#         ).sub(
-#             '',
-#             read('README.rst'),
-#             ),
-#     re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read(join('docs', 'CHANGELOG.rst')))
-#     )
-
-long_description = '{}\n{}'.format(
-    read('README.rst'),
-    read('CHANGELOG.rst'),
-    )
+long_description = read('README.md')
 
 setup(
     name='api_takehome',
@@ -84,14 +68,12 @@ setup(
     python_requires='>=3.7, <4',
     install_requires=[
         # https://stackoverflow.com/questions/14399534
-        # Don't forget to fill this out
-        'matplotlib>=3',
+        'fastapi',
         ],
-    extras_require={
-        # eg:
-        #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
-        },
+extras_require={
+        "tests": ['pytest'],
+        # "dev": [],
+    },
     setup_requires=[
         #   'pytest-runner',
         #   'setuptools_scm>=3.3.1',
