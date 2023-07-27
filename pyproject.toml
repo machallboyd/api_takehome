@@ -11,7 +11,8 @@ maintainers = [
   {name = "Matt Boyd", email = "machallboyd@gmail.com"},
 ]
 dependencies = [
-  "fastapi"
+  "fastapi",
+  "uvicorn"
 ]
 
 [project.urls]
