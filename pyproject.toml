@@ -1,5 +1,5 @@
 [project]
-name = "spam"
+name = "api_takehome"
 version = "0.1.0"
 description = "An API endpoint take-home exam."
 readme = "README.md"
