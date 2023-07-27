@@ -1,5 +1,8 @@
 # Backend Engineering Take-Home Challenge
 
+notes:
+explain installation of pip-tools for requirements generation for dev
+
 ### Introduction
 In this challenge, you will be tasked with creating a simple ETL pipeline that can be triggered via an API call. You will be provided with a set of CSV files that you will need to process, derive some features from, and then upload into a database table.
 

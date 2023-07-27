@@ -1,0 +1,27 @@
+[project]
+name = "spam"
+version = "0.1.0"
+description = "An API endpoint take-home exam."
+readme = "README.md"
+requires-python = ">=3.7"
+authors = [
+  {name = "Matt Boyd", email = "machallboyd@gmail.com"},
+]
+maintainers = [
+  {name = "Matt Boyd", email = "machallboyd@gmail.com"},
+]
+dependencies = [
+  "fastapi"
+]
+
+[project.urls]
+Repository = "https://github.com/machallboyd/api_takehome"
+
+#[project.scripts]
+#spam-cli = "spam:main_cli"
+#probably good for a demo script
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  ]
