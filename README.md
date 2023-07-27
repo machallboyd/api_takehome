@@ -2,6 +2,9 @@
 
 notes:
 explain installation of pip-tools for requirements generation for dev
+Going to have to have crun, containerd, buildkit, rancher desktop installed
+A makefile to install all of these would probably be easiest... but that's probably too much.
+Just try it with Docker Desktop
 
 ### Introduction
 In this challenge, you will be tasked with creating a simple ETL pipeline that can be triggered via an API call. You will be provided with a set of CSV files that you will need to process, derive some features from, and then upload into a database table.
