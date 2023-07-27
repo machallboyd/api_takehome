@@ -38,9 +38,9 @@ long_description = '{}\n{}'.format(
     )
 
 setup(
-    name='jmct-sampleproject',
+    name='api_takehome',
     version='0.11.3',
-    description='A skeleton template for Python projects.',
+    description='An API endpoint take-home exam.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
     license='MIT License',
