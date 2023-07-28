@@ -12,7 +12,8 @@ maintainers = [
 ]
 dependencies = [
   "fastapi",
-  "uvicorn"
+  "uvicorn",
+  "sqlalchemy"
 ]
 
 [project.urls]
