@@ -6,4 +6,4 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./src/api_takehome /code/api_takehome
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "api_takehome.main:app", "--host", "0.0.0.0", "--port", "8000"]
