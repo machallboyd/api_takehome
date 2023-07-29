@@ -26,8 +26,9 @@ Repository = "https://github.com/machallboyd/api_takehome"
 [project.optional-dependencies]
 dev = [
   "pytest",
-  "pip-tools"
-  ]
+  "pip-tools",
+  "isort"
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]  # list of folders that contain the packages (["."] by default)
