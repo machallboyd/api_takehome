@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, ForeignKey, String, Float
+from sqlalchemy import create_engine, Column, Integer, ForeignKey, String, Float, UUID
 from sqlalchemy.orm import registry, relationship
 from sqlalchemy.types import DateTime
 from sqlalchemy.sql import func
@@ -13,12 +13,13 @@ Base = test_registry.generate_base()
 class ExperimentSummary(Base):
     __tablename__ = 'experiment_summary'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-    user = relationship("User")
     total = Column(Integer)
-    fav_compound = Column(Integer, ForeignKey("compound.id"))
-    compounds = relationship("Compound")
+    fav_compound_id = Column(Integer, ForeignKey("compound.id"))
+
+    user = relationship("User")
+    fav_compound = relationship("Compound")
 
 class User(Base):
     __tablename__ = 'user'
@@ -38,7 +39,7 @@ class Compound(Base):
 class AverageExperimentsReport(Base):
     __tablename__ = 'average_experiment_report'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID, primary_key=True)
     timestamp = Column(DateTime, onupdate=func.now())
     avg = Column(Float)
 
