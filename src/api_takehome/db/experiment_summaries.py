@@ -13,9 +13,8 @@ class ExperimentSummary(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("Users")
-    compound = relationship()
     total = Column(Integer)
-    fav_compound = Column(Integer, ForeignKey("compounds.id"))
+    compounds = Column(Integer, ForeignKey("compounds.id"))
 
 class Users(Base):
     __tablename__ = 'users'
