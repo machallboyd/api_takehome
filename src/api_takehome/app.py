@@ -1,10 +1,11 @@
 import csv
 import os
 from collections.abc import Generator
+from collections import Counter
 from pathlib import Path
 from datetime import datetime
 
-from db.experiment_summaries import engine, User, create_test_db
+from db.experiment_summaries import engine, User, create_test_db, AverageExperimentsReport
 from sqlalchemy import insert
 from sqlalchemy.orm import Session
 
@@ -35,12 +36,23 @@ def load_users(data: list[list[str]]):
         insert(User), user_dicts
     )
 
+def load_avg_experiments(data):
+    counts_by_id = Counter(row[1] for row in data['user_experiments'])
+    dataset_average = counts_by_id.total() / len(counts_by_id.keys())
+    session = Session(engine)
+    session.execute(
+        insert(
+            AverageExperimentsReport(
+                avg = dataset_average
+            )
+        )
+    )
+
 def etl():
     raw_data = {filename: data for filename, data in transform_csvs()}
     load_users(raw_data['users'])
-    # Process files to derive features
-    # Upload processed data into a database
-    pass
+    load_avg_experiments(raw_data)
+
 
 create_test_db()
 etl()
