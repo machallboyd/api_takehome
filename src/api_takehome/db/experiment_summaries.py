@@ -14,28 +14,29 @@ class ExperimentSummary(Base):
     __tablename__ = 'experiment_summary'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("Users")
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship("User")
     total = Column(Integer)
-    fav_compound = Column(Integer, ForeignKey("compounds.id"))
-    compounds = relationship("Compounds")
+    fav_compound = Column(Integer, ForeignKey("compound.id"))
+    compounds = relationship("Compound")
 
-class Users(Base):
-    __tablename__ = 'users'
+class User(Base):
+    __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
     email = Column(String)
     signup_date = Column(DateTime)
 
-class Compounds(Base):
-    __tablename__ = 'compounds'
+
+class Compound(Base):
+    __tablename__ = 'compound'
 
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime)
 
-class AverageExperimentsReports(Base):
-    __tablename__ = 'average_experiment_reports'
+class AverageExperimentsReport(Base):
+    __tablename__ = 'average_experiment_report'
 
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, onupdate=func.now())
@@ -44,3 +45,5 @@ class AverageExperimentsReports(Base):
 def create_test_db():
     test_registry.metadata.create_all(engine)
 
+def test_engine():
+    return engine
