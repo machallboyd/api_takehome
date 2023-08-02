@@ -46,7 +46,7 @@ def load_users(data: list[list[str]]):
         user_dict['signup_date'] = datetime.strptime(user_dict['signup_date'], '%Y-%d-%m').date()
     with Session(engine) as session:
         session.execute(
-            update(User), user_dicts
+            insert(User), user_dicts
         )
 
 
