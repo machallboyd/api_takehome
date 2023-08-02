@@ -13,7 +13,7 @@ Base = test_registry.generate_base()
 class ExperimentSummary(Base):
     __tablename__ = 'experiment_summary'
 
-    id = Column(UUID, primary_key=True)
+    id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     total = Column(Integer)
     fav_compound_id = Column(Integer, ForeignKey("compound.id"))
@@ -41,7 +41,7 @@ class Compound(Base):
 class AverageExperimentsReport(Base):
     __tablename__ = 'average_experiment_report'
 
-    id = Column(UUID, primary_key=True)
+    id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, onupdate=func.now())
     avg = Column(Float)
 

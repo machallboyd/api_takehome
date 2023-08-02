@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from datetime import datetime
 
-from db.experiment_summaries import engine, User, create_test_db, AverageExperimentsReport, ExperimentSummary
+from db.experiment_summaries import engine, User, create_test_db, AverageExperimentsReport, ExperimentSummary, Compound
 from sqlalchemy import insert, update
 from sqlalchemy.orm import Session
 
@@ -37,8 +37,6 @@ def transform_csvs() -> Generator[tuple[str, list[list[str]]]]:
 def load_users(data: list[list[str]]):
     """
     Insert found users into the database
-
-    A bulk upsert would require a little more plumbing.
     """
     column_mappings = ['id', 'name', 'email', 'signup_date']
     user_dicts = [{key: value for key, value in zip(column_mappings, row)} for row in data]
@@ -49,6 +47,16 @@ def load_users(data: list[list[str]]):
             insert(User), user_dicts
         )
 
+def load_compounds(data: list[list[str]]):
+    """
+        Insert found components into the database
+    """
+    column_mappings = ["id", 'compound_name', 'compound_structure']
+    user_dicts = [{key: value for key, value in zip(column_mappings, row)} for row in data]
+    with Session(engine) as session:
+        session.execute(
+            insert(Compound), user_dicts
+        )
 
 
 def load_avg_experiments(data: list[list[str]]):
@@ -80,7 +88,7 @@ def load_report(alldata: dict[str, list[list[str]]]):
 def etl():
     csv_data = {filename: data for filename, data in transform_csvs()}
     load_users(csv_data['users'])
-    # TODO: load compounds
+    load_compounds(csv_data['compounds'])
     load_avg_experiments(csv_data['user_experiments'])
 
 
