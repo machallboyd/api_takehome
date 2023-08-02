@@ -59,11 +59,7 @@ def load_avg_experiments(data: list[list[str]]):
     dataset_average = counts_by_id.total() / len(counts_by_id.keys())
     with Session(engine) as session:
         session.execute(
-            insert(
-                AverageExperimentsReport(
-                    avg = dataset_average
-                )
-            )
+            insert(AverageExperimentsReport).values(avg=dataset_average)
         )
 
 def load_report(alldata: dict[str, list[list[str]]]):
