@@ -1,21 +1,16 @@
 from fastapi import FastAPI
 
+from app import etl
+from db.experiment_summaries import create_test_db
+
 app = FastAPI()
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
 @app.get("/csv")
-def etl():
-    # Load CSV files
-    # Process files to derive features
-    # Upload processed data into a database
+def trigger_etl():
+    etl()
     return {"message": "ETL process started"}, 200
 
+@app.get("/setup_test_db")
+def setup_test_db():
+    create_test_db()
+    return {"message": "Triggering test db setup"}, 200

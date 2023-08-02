@@ -6,7 +6,8 @@ from sqlalchemy.sql import func
 #in production, grab url from env variable to swap between prod and dev dbs.
 db_url = "sqlite+pysqlite:///:memory:"
 
-engine = create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
+# engine = create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
+engine = create_engine("postgresql+psycopg2://user:extremely_secure_pw@localhost:5432/testdb", echo=True)
 test_registry = registry()
 Base = test_registry.generate_base()
 
