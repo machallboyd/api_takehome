@@ -34,7 +34,9 @@ class Compound(Base):
     __tablename__ = 'compound'
 
     id = Column(Integer, primary_key=True)
-    timestamp = Column(DateTime)
+    compound_name = Column(String)
+    compound_structure = Column(String)
+
 
 class AverageExperimentsReport(Base):
     __tablename__ = 'average_experiment_report'
