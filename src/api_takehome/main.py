@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from app import etl
-from db.experiment_summaries import create_test_db
+from api_takehome.app import etl
+from api_takehome.db.experiment_summaries import create_test_db
 
 app = FastAPI()
 

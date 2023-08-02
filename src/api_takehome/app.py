@@ -5,8 +5,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from datetime import datetime
 
-from db.experiment_summaries import engine, User, create_test_db, AverageExperimentsReport, ExperimentSummary, Compound
-from sqlalchemy import insert, update
+from api_takehome.db.experiment_summaries import engine, User, create_test_db, AverageExperimentsReport, ExperimentSummary, Compound
+from sqlalchemy import insert
 from sqlalchemy.orm import Session
 
 def csv_cleaner(reader: csv.reader) -> Generator[list[str]]:
@@ -90,8 +90,3 @@ def etl():
     load_users(csv_data['users'])
     load_compounds(csv_data['compounds'])
     load_avg_experiments(csv_data['user_experiments'])
-
-
-
-create_test_db()
-etl()
