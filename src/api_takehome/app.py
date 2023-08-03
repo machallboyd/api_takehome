@@ -119,21 +119,11 @@ def query_average_experiments_per_user() -> int:
 
 def query_user_reports():
     with Session(engine) as session, session.begin():
-        session.execute(
+        return session.execute(
             select(User.name, ExperimentSummary.total, Compound.compound_name)
             .join(ExperimentSummary.user)
             .join(ExperimentSummary.fav_compound)
         ).all()
-
-
-def report():
-    """
-    1. Total experiments a user ran.
-    2. Average experiments amount per user.
-    3. User's most commonly experimented compound.
-    """
-    latest_avg = query_average_experiments_per_user()
-    user_report = query_user_reports()
 
 
 def etl():
