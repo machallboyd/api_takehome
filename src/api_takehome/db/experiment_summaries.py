@@ -1,19 +1,24 @@
-from sqlalchemy import create_engine, Column, Integer, ForeignKey, String, Float, UUID
-from sqlalchemy.orm import registry, relationship
-from sqlalchemy.types import DateTime
-from sqlalchemy.sql import func
-
 import os
 
-DB_HOSTNAME = os.environ['API_DB_PATH']
+from sqlalchemy import Column, create_engine, Float, ForeignKey, Integer, String, UUID
+from sqlalchemy.orm import registry, relationship
+from sqlalchemy.sql import func
+from sqlalchemy.types import DateTime
 
-# engine = create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
-engine = create_engine(f"postgresql+psycopg2://postgres:extremely_secure_pw@{DB_HOSTNAME}:5432/testdb", echo=True)
+DB_HOSTNAME = os.environ.get("API_DB_PATH")
+db_url = (
+    f"postgresql+psycopg2://postgres:extremely_secure_pw@{DB_HOSTNAME}:5432/testdb"
+    if DB_HOSTNAME
+    else "sqlite+pysqlite:///:memory:"
+)
+
+engine = create_engine(db_url, echo=True)
 test_registry = registry()
 Base = test_registry.generate_base()
 
+
 class ExperimentSummary(Base):
-    __tablename__ = 'experiment_summary'
+    __tablename__ = "experiment_summary"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
@@ -23,8 +28,9 @@ class ExperimentSummary(Base):
     user = relationship("User")
     fav_compound = relationship("Compound")
 
+
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -33,7 +39,7 @@ class User(Base):
 
 
 class Compound(Base):
-    __tablename__ = 'compound'
+    __tablename__ = "compound"
 
     id = Column(Integer, primary_key=True)
     compound_name = Column(String)
@@ -41,14 +47,16 @@ class Compound(Base):
 
 
 class AverageExperimentsReport(Base):
-    __tablename__ = 'average_experiment_report'
+    __tablename__ = "average_experiment_report"
 
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, onupdate=func.now())
     avg = Column(Float)
 
+
 def create_test_db():
     test_registry.metadata.create_all(engine)
+
 
 def test_engine():
     return engine

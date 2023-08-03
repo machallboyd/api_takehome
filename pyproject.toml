@@ -36,3 +36,6 @@ dev = [
 where = ["src"]  # list of folders that contain the packages (["."] by default)
 include = ["api_takehome"]  # package names should match these glob patterns (["*"] by default)
 namespaces = false
+
+[tool.isort]
+profile = "appnexus"
