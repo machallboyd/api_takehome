@@ -150,7 +150,7 @@ def test_load_compounds(patch_data_dir, setup_db):
 
 def test_load_avg_experiments(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
-    load_avg_experiments(cvses["compounds"])
+    load_avg_experiments(cvses["user_experiments"])
     with Session(test_engine()) as session:
         result = session.scalar(select(AverageExperimentsReport.avg))
     assert result == 1.5
