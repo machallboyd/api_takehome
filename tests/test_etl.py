@@ -20,7 +20,7 @@ from api_takehome.db.experiment_summaries import (
     AverageExperimentsReport,
     Compound,
     ExperimentSummary,
-    test_engine,
+    engine,
     test_registry,
     User,
 )
@@ -99,9 +99,9 @@ def patch_data_dir(test_dir, monkeypatch):
 
 @pytest.fixture
 def setup_db():
-    test_registry.metadata.create_all(bind=test_engine())
+    test_registry.metadata.create_all(bind=engine)
     yield
-    test_registry.metadata.drop_all(bind=test_engine())
+    test_registry.metadata.drop_all(bind=engine)
 
 
 transformed_csv_data = {
@@ -130,7 +130,7 @@ def test_transform_csvs(patch_data_dir):
 def test_load_users(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_users(cvses)
-    with Session(test_engine()) as session:
+    with Session(engine) as session:
         result = session.execute(
             select(User.id, User.name, User.email, User.signup_date)
         ).all()
@@ -143,7 +143,7 @@ def test_load_users(patch_data_dir, setup_db):
 def test_load_compounds(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_compounds(cvses)
-    with Session(test_engine()) as session:
+    with Session(engine) as session:
         result = session.execute(
             select(Compound.id, Compound.compound_name, Compound.compound_structure)
         ).all()
@@ -156,7 +156,7 @@ def test_load_compounds(patch_data_dir, setup_db):
 def test_load_avg_experiments(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_avg_experiments(cvses)
-    with Session(test_engine()) as session:
+    with Session(engine) as session:
         result = session.scalar(select(AverageExperimentsReport.avg))
     assert result == 1.5
 
@@ -164,7 +164,7 @@ def test_load_avg_experiments(patch_data_dir, setup_db):
 def test_load_report(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_report(cvses)
-    with Session(test_engine()) as session:
+    with Session(engine) as session:
         result = session.execute(
             select(
                 ExperimentSummary.user_id,
@@ -177,7 +177,7 @@ def test_load_report(patch_data_dir, setup_db):
 
 def test_relationships(patch_data_dir, setup_db):
     etl()
-    with Session(test_engine()) as session:
+    with Session(engine) as session:
         summary = session.scalars(
             select(ExperimentSummary).where(ExperimentSummary.user_id == 1)
         ).one()

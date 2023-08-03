@@ -61,6 +61,3 @@ class AverageExperimentsReport(Base):
 def create_test_db():
     test_registry.metadata.create_all(engine)
 
-
-def test_engine():
-    return engine
