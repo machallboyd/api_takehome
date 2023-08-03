@@ -25,8 +25,8 @@ class ExperimentSummary(Base):
     total = Column(Integer)
     fav_compound_id = Column(Integer, ForeignKey("compound.id"))
 
-    user = relationship("User")
-    fav_compound = relationship("Compound")
+    user = relationship("User", back_populates="summary")
+    fav_compound = relationship("Compound", back_populates="summary")
 
 
 class User(Base):
@@ -37,6 +37,8 @@ class User(Base):
     email = Column(String)
     signup_date = Column(DateTime)
 
+    summary = relationship("ExperimentSummary", uselist=False, back_populates="user")
+
 
 class Compound(Base):
     __tablename__ = "compound"
@@ -44,6 +46,8 @@ class Compound(Base):
     id = Column(Integer, primary_key=True)
     compound_name = Column(String)
     compound_structure = Column(String)
+
+    summary = relationship("ExperimentSummary", uselist=False, back_populates="fav_compound")
 
 
 class AverageExperimentsReport(Base):

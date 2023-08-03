@@ -21,6 +21,7 @@ from api_takehome.db.experiment_summaries import (
     ExperimentSummary,
     test_engine,
     User,
+    AverageExperimentsReport
 )
 
 user_csvs = [
@@ -124,8 +125,8 @@ def setup_db():
 
 
 def test_load_users(patch_data_dir, setup_db):
-    result = dict(transform_csvs())
-    load_users(result["users"])
+    cvses = dict(transform_csvs())
+    load_users(cvses["users"])
     with Session(test_engine()) as session:
         result = session.execute(
             select(User.id, User.name, User.email, User.signup_date)
@@ -134,3 +135,44 @@ def test_load_users(patch_data_dir, setup_db):
         tuple((int(row[0]), row[1], row[2], datetime.fromisoformat(row[3])))
         for row in transformed_csv_data["users"]
     ]
+
+def test_load_compounds(patch_data_dir, setup_db):
+    cvses = dict(transform_csvs())
+    load_compounds(cvses["compounds"])
+    with Session(test_engine()) as session:
+        result = session.execute(
+            select(Compound.id, Compound.compound_name, Compound.compound_structure)
+        ).all()
+    assert list(result) == [
+        tuple((int(row[0]), row[1], row[2]))
+        for row in transformed_csv_data["compounds"]
+    ]
+
+def test_load_avg_experiments(patch_data_dir, setup_db):
+    cvses = dict(transform_csvs())
+    load_avg_experiments(cvses["compounds"])
+    with Session(test_engine()) as session:
+        result = session.scalar(select(AverageExperimentsReport.avg))
+    assert result == 1.5
+
+def test_load_report(patch_data_dir, setup_db):
+    cvses = dict(transform_csvs())
+    load_report(cvses)
+    with Session(test_engine()) as session:
+        result = session.execute(
+            select(ExperimentSummary.user_id, ExperimentSummary.fav_compound_id, ExperimentSummary.total)
+        ).all()
+    assert result == [(1, 2, 2), (2, 1, 1)]
+
+def test_relationships(patch_data_dir, setup_db):
+        cvses = dict(transform_csvs())
+        load_users(cvses["users"])
+        load_compounds(cvses["compounds"])
+        load_report(cvses)
+        with Session(test_engine()) as session:
+            summary = session.scalars(
+                select(ExperimentSummary).where(ExperimentSummary.user_id == 1)
+            ).one()
+            assert summary.user.name == "Alice"
+            assert summary.fav_compound.compound_name == "Compound B"
+            assert summary.fav_compound.compound_structure == "C21H30O2"
