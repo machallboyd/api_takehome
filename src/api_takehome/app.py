@@ -16,6 +16,7 @@ from api_takehome.db.experiment_summaries import (
     User,
 )
 
+data_path = Path(__file__).parent.joinpath("data")
 
 def csv_cleaner(reader: csv.reader) -> Generator[list[str]]:
     """
@@ -39,7 +40,7 @@ def transform_csvs() -> Generator[tuple[str, list[list[str]]]]:
     """
     Produce lists of strings from csv files, as well as the name of the file it came from
     """
-    with os.scandir(Path(__file__).parent.joinpath("data")) as csv_files:
+    with os.scandir(data_path) as csv_files:
         for csv_file in csv_files:
             with open(csv_file.path) as f:
                 yield csv_file.name.split(".csv")[0], list(csv_cleaner(csv.reader(f)))
@@ -50,12 +51,10 @@ def load_users(data: list[list[str]]):
     Insert found users into the database
     """
     column_mappings = ["id", "name", "email", "signup_date"]
-    user_dicts = [
-        {key: value for key, value in zip(column_mappings, row)} for row in data
-    ]
+    user_dicts = [dict(zip(column_mappings, row)) for row in data]
     for user_dict in user_dicts:
         user_dict["signup_date"] = datetime.strptime(
-            user_dict["signup_date"], "%Y-%d-%m"
+            user_dict["signup_date"], "%Y-%m-%d"
         ).date()
     with Session(engine) as session, session.begin():
         session.execute(insert(User), user_dicts)
@@ -138,7 +137,7 @@ def etl():
     """
     Main process for extract, transform and load on local csv files
     """
-    csv_data = {filename: data for filename, data in transform_csvs()}
+    csv_data = dict(transform_csvs())
     load_users(csv_data["users"])
     load_compounds(csv_data["compounds"])
     load_avg_experiments(csv_data["user_experiments"])
