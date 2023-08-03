@@ -21,7 +21,7 @@ Records:
 
 Make sure docker is running. Docker Desktop can be found at https://www.docker.com/products/docker-desktop/
 
-Open a Unix terminal. On Mac, the the built-in Terminal application qualifies. On Windows, a convenient alternative is Windows Subsystem for Linux: https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-11-with-gui-support#1-overview
+Open a Unix terminal. On Mac, the built-in Terminal application qualifies. On Windows, a convenient alternative is Windows Subsystem for Linux: https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-11-with-gui-support#1-overview
 
 First, clone this repository into a local directory. In a terminal:
 
