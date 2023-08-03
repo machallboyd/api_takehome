@@ -14,6 +14,7 @@ from api_takehome.app import (
     load_report,
     load_users,
     transform_csvs,
+    etl
 )
 from api_takehome.db.experiment_summaries import (
     Compound,
@@ -165,10 +166,7 @@ def test_load_report(patch_data_dir, setup_db):
     assert result == [(1, 2, 2), (2, 1, 1)]
 
 def test_relationships(patch_data_dir, setup_db):
-        cvses = dict(transform_csvs())
-        load_users(cvses)
-        load_compounds(cvses)
-        load_report(cvses)
+        etl()
         with Session(test_engine()) as session:
             summary = session.scalars(
                 select(ExperimentSummary).where(ExperimentSummary.user_id == 1)
