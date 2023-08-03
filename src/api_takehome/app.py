@@ -29,7 +29,7 @@ def transform_csvs() -> Generator[tuple[str, list[list[str]]]]:
     """
     Produce lists of strings from csv files, as well as the name of the file it came from
     """
-    with os.scandir(Path(__file__).joinpath('data')) as csv_files:
+    with os.scandir(Path(__file__).parent.joinpath('data')) as csv_files:
         for csv_file in csv_files:
             with open(csv_file.path) as f:
                 yield csv_file.name.split('.csv')[0], list(csv_cleaner(csv.reader(f)))
