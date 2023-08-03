@@ -3,11 +3,12 @@ from sqlalchemy.orm import registry, relationship
 from sqlalchemy.types import DateTime
 from sqlalchemy.sql import func
 
-#in production, grab url from env variable to swap between prod and dev dbs.
-db_url = "sqlite+pysqlite:///:memory:"
+import os
+
+DB_HOSTNAME = os.environ['API_DB_PATH']
 
 # engine = create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
-engine = create_engine("postgresql+psycopg2://user:extremely_secure_pw@localhost:5432/testdb", echo=True)
+engine = create_engine(f"postgresql+psycopg2://user:extremely_secure_pw@{DB_HOSTNAME}):5432/testdb", echo=True)
 test_registry = registry()
 Base = test_registry.generate_base()
 
