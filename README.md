@@ -1,7 +1,7 @@
 # Backend Engineering Take-Home Challenge
 
 ### Requirements
-- Python 3.10+
+- Python 3.10+ (in container, or if running tests locally)
 - Docker
 - PostgreSQL
 
