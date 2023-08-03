@@ -9,20 +9,20 @@ from sqlalchemy.orm import Session
 import api_takehome.app
 from api_takehome.app import (
     csv_cleaner,
+    etl,
     load_avg_experiments,
     load_compounds,
     load_report,
     load_users,
     transform_csvs,
-    etl
 )
 from api_takehome.db.experiment_summaries import (
+    AverageExperimentsReport,
     Compound,
     ExperimentSummary,
     test_engine,
-    User,
-    AverageExperimentsReport,
     test_registry,
+    User,
 )
 
 user_csvs = [
@@ -139,6 +139,7 @@ def test_load_users(patch_data_dir, setup_db):
         for row in transformed_csv_data["users"]
     ]
 
+
 def test_load_compounds(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_compounds(cvses)
@@ -151,6 +152,7 @@ def test_load_compounds(patch_data_dir, setup_db):
         for row in transformed_csv_data["compounds"]
     ]
 
+
 def test_load_avg_experiments(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_avg_experiments(cvses)
@@ -158,21 +160,27 @@ def test_load_avg_experiments(patch_data_dir, setup_db):
         result = session.scalar(select(AverageExperimentsReport.avg))
     assert result == 1.5
 
+
 def test_load_report(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
     load_report(cvses)
     with Session(test_engine()) as session:
         result = session.execute(
-            select(ExperimentSummary.user_id, ExperimentSummary.fav_compound_id, ExperimentSummary.total)
+            select(
+                ExperimentSummary.user_id,
+                ExperimentSummary.fav_compound_id,
+                ExperimentSummary.total,
+            )
         ).all()
     assert result == [(1, 2, 2), (2, 1, 1)]
 
+
 def test_relationships(patch_data_dir, setup_db):
-        etl()
-        with Session(test_engine()) as session:
-            summary = session.scalars(
-                select(ExperimentSummary).where(ExperimentSummary.user_id == 1)
-            ).one()
-            assert summary.user.name == "Alice"
-            assert summary.fav_compound.compound_name == "Compound B"
-            assert summary.fav_compound.compound_structure == "C21H30O2"
+    etl()
+    with Session(test_engine()) as session:
+        summary = session.scalars(
+            select(ExperimentSummary).where(ExperimentSummary.user_id == 1)
+        ).one()
+        assert summary.user.name == "Alice"
+        assert summary.fav_compound.compound_name == "Compound B"
+        assert summary.fav_compound.compound_structure == "C21H30O2"
