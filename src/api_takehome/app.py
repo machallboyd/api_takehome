@@ -142,8 +142,3 @@ def etl():
     load_compounds(csv_data["compounds"])
     load_avg_experiments(csv_data["user_experiments"])
     load_report(csv_data)
-
-
-create_test_db()
-etl()
-report()
