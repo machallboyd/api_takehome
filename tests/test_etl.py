@@ -18,11 +18,11 @@ from api_takehome.app import (
 )
 from api_takehome.db.experiment_summaries import (
     Compound,
-    create_test_db,
     ExperimentSummary,
     test_engine,
     User,
-    AverageExperimentsReport
+    AverageExperimentsReport,
+    test_registry,
 )
 
 user_csvs = [
@@ -122,7 +122,9 @@ def test_transform_csvs(patch_data_dir):
 
 @pytest.fixture
 def setup_db():
-    create_test_db()
+    test_registry.metadata.create_all(bind=test_engine())
+    yield
+    test_registry.metadata.drop_all(bind=test_engine())
 
 
 def test_load_users(patch_data_dir, setup_db):
