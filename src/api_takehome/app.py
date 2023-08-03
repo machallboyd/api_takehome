@@ -66,10 +66,7 @@ def load_compounds(alldata: dict[str, list[list[str]]]):
     Insert found components into the database
     """
     column_mappings = ["id", "compound_name", "compound_structure"]
-    user_dicts = [
-        {key: value for key, value in zip(column_mappings, row)}
-        for row in alldata["compounds"]
-    ]
+    user_dicts = [dict(zip(column_mappings, row)) for row in alldata["compounds"]]
     with Session(engine) as session, session.begin():
         session.execute(insert(Compound), user_dicts)
 
