@@ -126,7 +126,7 @@ def setup_db():
 
 def test_load_users(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
-    load_users(cvses["users"])
+    load_users(cvses)
     with Session(test_engine()) as session:
         result = session.execute(
             select(User.id, User.name, User.email, User.signup_date)
@@ -138,7 +138,7 @@ def test_load_users(patch_data_dir, setup_db):
 
 def test_load_compounds(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
-    load_compounds(cvses["compounds"])
+    load_compounds(cvses)
     with Session(test_engine()) as session:
         result = session.execute(
             select(Compound.id, Compound.compound_name, Compound.compound_structure)
@@ -150,7 +150,7 @@ def test_load_compounds(patch_data_dir, setup_db):
 
 def test_load_avg_experiments(patch_data_dir, setup_db):
     cvses = dict(transform_csvs())
-    load_avg_experiments(cvses["user_experiments"])
+    load_avg_experiments(cvses)
     with Session(test_engine()) as session:
         result = session.scalar(select(AverageExperimentsReport.avg))
     assert result == 1.5
@@ -166,8 +166,8 @@ def test_load_report(patch_data_dir, setup_db):
 
 def test_relationships(patch_data_dir, setup_db):
         cvses = dict(transform_csvs())
-        load_users(cvses["users"])
-        load_compounds(cvses["compounds"])
+        load_users(cvses)
+        load_compounds(cvses)
         load_report(cvses)
         with Session(test_engine()) as session:
             summary = session.scalars(

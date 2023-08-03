@@ -46,12 +46,12 @@ def transform_csvs() -> Generator[tuple[str, list[list[str]]]]:
                 yield csv_file.name.split(".csv")[0], list(csv_cleaner(csv.reader(f)))
 
 
-def load_users(data: list[list[str]]):
+def load_users(alldata: dict[str, list[list[str]]]):
     """
     Insert found users into the database
     """
     column_mappings = ["id", "name", "email", "signup_date"]
-    user_dicts = [dict(zip(column_mappings, row)) for row in data]
+    user_dicts = [dict(zip(column_mappings, row)) for row in alldata['users']]
     for user_dict in user_dicts:
         user_dict["signup_date"] = datetime.strptime(
             user_dict["signup_date"], "%Y-%m-%d"
@@ -60,22 +60,23 @@ def load_users(data: list[list[str]]):
         session.execute(insert(User), user_dicts)
 
 
-def load_compounds(data: list[list[str]]):
+def load_compounds(alldata: dict[str, list[list[str]]]):
     """
     Insert found components into the database
     """
     column_mappings = ["id", "compound_name", "compound_structure"]
     user_dicts = [
-        {key: value for key, value in zip(column_mappings, row)} for row in data
+        {key: value for key, value in zip(column_mappings, row)} for row in alldata['compounds']
     ]
     with Session(engine) as session, session.begin():
         session.execute(insert(Compound), user_dicts)
 
 
-def load_avg_experiments(data: list[list[str]]):
+def load_avg_experiments(alldata: dict[str, list[list[str]]]):
     """
     Calculate and load into the database the average number of experiments per user for this data set
     """
+    data = alldata["user_experiments"]
     counts_by_id = Counter(row[1] for row in data)
     dataset_average = counts_by_id.total() / len(counts_by_id.keys())
     with Session(engine) as session, session.begin():
