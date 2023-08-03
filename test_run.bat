@@ -14,9 +14,10 @@ sleep 2
 echo Activating API
 curl http://localhost:8000/setup_test_db
 curl http://localhost:8000/csv
-curl http://localhost:8000/report
 
 echo Requesting data from local database
+curl http://localhost:8000/report
 
+echo Tearing down containers
 docker rm -f test_postgres
 docker rm -f api_takehome
