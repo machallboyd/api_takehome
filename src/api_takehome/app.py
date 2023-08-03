@@ -92,7 +92,7 @@ def load_report(alldata: dict[str, list[list[str]]]):
     for row in alldata["user_experiments"]:
         compounds_by_user_id[row[1]].extend(int(i) for i in row[2].split(";"))
     fav_by_user_id = {
-        user_id: Counter(compounds).most_common()
+        user_id: Counter(compounds).most_common(1)[0][0]
         for user_id, compounds in compounds_by_user_id.items()
     }
     reports = [
@@ -107,18 +107,33 @@ def load_report(alldata: dict[str, list[list[str]]]):
         session.execute(insert(ExperimentSummary), reports)
 
 
+def query_average_experiments_per_user() -> int:
+    with Session(engine) as session, session.begin():
+        latest_avg = session.scalar(
+            select(AverageExperimentsReport.avg).order_by(
+                AverageExperimentsReport.timestamp.desc()
+            )
+        )
+    return latest_avg
+
+
+def query_user_reports():
+    with Session(engine) as session, session.begin():
+        session.execute(
+            select(User.name, ExperimentSummary.total, Compound.compound_name)
+            .join(ExperimentSummary.user)
+            .join(ExperimentSummary.fav_compound)
+        ).all()
+
+
 def report():
     """
     1. Total experiments a user ran.
     2. Average experiments amount per user.
     3. User's most commonly experimented compound.
     """
-    with Session(engine) as session, session.begin():
-        avg = session.scalar(
-            select(AverageExperimentsReport.avg).order_by(
-                AverageExperimentsReport.timestamp.desc()
-            )
-        )
+    latest_avg = query_average_experiments_per_user()
+    user_report = query_user_reports()
 
 
 def etl():
