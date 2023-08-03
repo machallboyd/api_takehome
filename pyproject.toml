@@ -39,3 +39,8 @@ namespaces = false
 
 [tool.isort]
 profile = "appnexus"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]

@@ -20,8 +20,9 @@ from api_takehome.db.experiment_summaries import (
 def csv_cleaner(reader: csv.reader) -> Generator[list[str]]:
     """
     Quick hack to screen out blank lines or header info
-    This also blocked an attempt at csv.DictReader which would have been great
-    Messy data is life, though
+
+    If the first cell isn't an integer, skip it.
+    A more robust approach might be to write a temp file.
     """
     for row in reader:
         try:
@@ -107,6 +108,9 @@ def load_report(alldata: dict[str, list[list[str]]]):
 
 
 def query_average_experiments_per_user() -> int:
+    """
+    Query for the average number of experiments users ran.
+    """
     with Session(engine) as session, session.begin():
         latest_avg = session.scalar(
             select(AverageExperimentsReport.avg).order_by(
@@ -117,6 +121,11 @@ def query_average_experiments_per_user() -> int:
 
 
 def query_user_reports() -> Sequence:
+    """
+    Query for the per-user summary of activity.
+
+    User name, total experiments run, most used compound
+    """
     with Session(engine) as session, session.begin():
         return session.execute(
             select(User.name, ExperimentSummary.total, Compound.compound_name)
@@ -126,6 +135,9 @@ def query_user_reports() -> Sequence:
 
 
 def etl():
+    """
+    Main process for extract, transform and load on local csv files
+    """
     csv_data = {filename: data for filename, data in transform_csvs()}
     load_users(csv_data["users"])
     load_compounds(csv_data["compounds"])
