@@ -47,7 +47,9 @@ class Compound(Base):
     compound_name = Column(String)
     compound_structure = Column(String)
 
-    summary = relationship("ExperimentSummary", uselist=False, back_populates="fav_compound")
+    summary = relationship(
+        "ExperimentSummary", uselist=False, back_populates="fav_compound"
+    )
 
 
 class AverageExperimentsReport(Base):
@@ -60,4 +62,3 @@ class AverageExperimentsReport(Base):
 
 def create_test_db():
     test_registry.metadata.create_all(engine)
-

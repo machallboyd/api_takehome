@@ -18,6 +18,7 @@ from api_takehome.db.experiment_summaries import (
 
 data_path = Path(__file__).parent.joinpath("data")
 
+
 def csv_cleaner(reader: csv.reader) -> Generator[list[str]]:
     """
     Quick hack to screen out blank lines or header info
@@ -51,7 +52,7 @@ def load_users(alldata: dict[str, list[list[str]]]):
     Insert found users into the database
     """
     column_mappings = ["id", "name", "email", "signup_date"]
-    user_dicts = [dict(zip(column_mappings, row)) for row in alldata['users']]
+    user_dicts = [dict(zip(column_mappings, row)) for row in alldata["users"]]
     for user_dict in user_dicts:
         user_dict["signup_date"] = datetime.strptime(
             user_dict["signup_date"], "%Y-%m-%d"
@@ -66,7 +67,8 @@ def load_compounds(alldata: dict[str, list[list[str]]]):
     """
     column_mappings = ["id", "compound_name", "compound_structure"]
     user_dicts = [
-        {key: value for key, value in zip(column_mappings, row)} for row in alldata['compounds']
+        {key: value for key, value in zip(column_mappings, row)}
+        for row in alldata["compounds"]
     ]
     with Session(engine) as session, session.begin():
         session.execute(insert(Compound), user_dicts)
