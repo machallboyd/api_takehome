@@ -8,28 +8,48 @@ annotated-types==0.5.0
     # via pydantic
 anyio==3.7.1
     # via starlette
+black==23.7.0
+    # via api-takehome (pyproject.toml)
 build==0.10.0
     # via pip-tools
 click==8.1.6
-    # via pip-tools
+    # via
+    #   black
+    #   pip-tools
+    #   uvicorn
 exceptiongroup==1.1.2
     # via
     #   anyio
     #   pytest
 fastapi==0.100.1
-    # via spam (pyproject.toml)
+    # via api-takehome (pyproject.toml)
+greenlet==2.0.2
+    # via sqlalchemy
+h11==0.14.0
+    # via uvicorn
 idna==3.4
     # via anyio
 iniconfig==2.0.0
     # via pytest
+isort==5.12.0
+    # via api-takehome (pyproject.toml)
+mypy-extensions==1.0.0
+    # via black
 packaging==23.1
     # via
+    #   black
     #   build
     #   pytest
+pathspec==0.11.2
+    # via black
 pip-tools==7.1.0
-    # via spam (pyproject.toml)
+    # via api-takehome (pyproject.toml)
+platformdirs==3.10.0
+    # via black
 pluggy==1.2.0
     # via pytest
+psycopg2-binary==2.9.6
+    # via api-takehome (pyproject.toml)
 pydantic==2.1.1
     # via fastapi
 pydantic-core==2.4.0
@@ -37,13 +57,16 @@ pydantic-core==2.4.0
 pyproject-hooks==1.0.0
     # via build
 pytest==7.4.0
-    # via spam (pyproject.toml)
+    # via api-takehome (pyproject.toml)
 sniffio==1.3.0
     # via anyio
+sqlalchemy==2.0.19
+    # via api-takehome (pyproject.toml)
 starlette==0.27.0
     # via fastapi
 tomli==2.0.1
     # via
+    #   black
     #   build
     #   pip-tools
     #   pyproject-hooks
@@ -53,6 +76,10 @@ typing-extensions==4.7.1
     #   fastapi
     #   pydantic
     #   pydantic-core
+    #   sqlalchemy
+    #   uvicorn
+uvicorn==0.23.2
+    # via api-takehome (pyproject.toml)
 wheel==0.41.0
     # via pip-tools
 

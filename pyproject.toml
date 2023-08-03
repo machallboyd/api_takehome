@@ -28,7 +28,8 @@ Repository = "https://github.com/machallboyd/api_takehome"
 dev = [
   "pytest",
   "pip-tools",
-  "isort"
+  "isort",
+  "black"
 ]
 
 [tool.setuptools.packages.find]
