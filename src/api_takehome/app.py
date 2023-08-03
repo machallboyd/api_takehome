@@ -97,7 +97,7 @@ def load_report(alldata: dict[str, list[list[str]]]):
     }
     reports = [
         {
-            "user_id": user_id,
+            "user_id": int(user_id),
             "fav_compound_id": fav_by_user_id[user_id],
             "total": exp_counts_by_user_id[user_id],
         }
@@ -139,7 +139,7 @@ def etl():
     Main process for extract, transform and load on local csv files
     """
     csv_data = dict(transform_csvs())
-    load_users(csv_data["users"])
-    load_compounds(csv_data["compounds"])
-    load_avg_experiments(csv_data["user_experiments"])
+    load_users(csv_data)
+    load_compounds(csv_data)
+    load_avg_experiments(csv_data)
     load_report(csv_data)
