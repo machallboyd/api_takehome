@@ -22,4 +22,4 @@ def setup_test_db():
 def report():
     latest_avg = query_average_experiments_per_user()
     json_reports = [{'name': name, 'count': count, 'fav_compound': fav_compound} for name, count, fav_compound in query_user_reports()]
-    return {"user_average": latest_avg, "user_reports": json_reports}, 200
+    return {"average_experiment_count": latest_avg, "user_reports": json_reports}, 200
