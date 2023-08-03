@@ -97,6 +97,13 @@ def patch_data_dir(test_dir, monkeypatch):
     monkeypatch.setattr(api_takehome.app, "data_path", test_dir)
 
 
+@pytest.fixture
+def setup_db():
+    test_registry.metadata.create_all(bind=test_engine())
+    yield
+    test_registry.metadata.drop_all(bind=test_engine())
+
+
 transformed_csv_data = {
     "compounds": [
         ["1", "Compound A", "C20H25N3O"],
@@ -118,13 +125,6 @@ transformed_csv_data = {
 def test_transform_csvs(patch_data_dir):
     result = dict(transform_csvs())
     assert result == transformed_csv_data
-
-
-@pytest.fixture
-def setup_db():
-    test_registry.metadata.create_all(bind=test_engine())
-    yield
-    test_registry.metadata.drop_all(bind=test_engine())
 
 
 def test_load_users(patch_data_dir, setup_db):
