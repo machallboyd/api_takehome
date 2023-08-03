@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from collections.abc import Generator
+from collections.abc import Generator, Sequence
 import csv
 from datetime import datetime
 import os
@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 from api_takehome.db.experiment_summaries import (
     AverageExperimentsReport,
     Compound,
-    create_test_db,
     engine,
     ExperimentSummary,
     User,
@@ -117,7 +116,7 @@ def query_average_experiments_per_user() -> int:
     return latest_avg
 
 
-def query_user_reports():
+def query_user_reports() -> Sequence:
     with Session(engine) as session, session.begin():
         return session.execute(
             select(User.name, ExperimentSummary.total, Compound.compound_name)
